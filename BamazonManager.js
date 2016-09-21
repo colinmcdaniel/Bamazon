@@ -1,0 +1,97 @@
+var mysql = require('mysql');
+var inquirer = require('inquirer');
+// var numProducts;
+
+var connection = mysql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "drummrboy1",
+    database: "Bamazon"
+});
+
+connection.connect(function(err) {
+    if (err) throw err;
+    promptUser();
+});
+
+var promptUser = function(){
+	connection.query('SELECT * FROM Products', function(err, res) {
+        numProducts = res.length;
+	});
+
+	inquirer.prompt([{
+        name: "option",
+        type: "list",
+        message: "Choose a menu option:",
+        choices: ["View Products for Sale","View Low Inventory","Add to Inventory","Add New Product"]
+    }]).then(function(answer) {
+        if(answer.option == "View Products for Sale"){
+        	displayItems();
+        }
+        else if(answer.option == "View Low Inventory"){
+        	connection.query('SELECT * FROM Products WHERE StockQuantity<5', function(err, res) {
+		        for (var i = 0; i < res.length; i++) {
+		            console.log("");
+		            console.log("ID: " + res[i].ItemID);
+		            console.log("Name: " + res[i].ProductName);
+		            console.log("Price: $" + res[i].Price);
+		            console.log("Quantity: " + res[i].StockQuantity);
+		        }
+		        console.log("");
+		    });
+        }
+        else if(answer.option == "Add to Inventory"){
+        	inquirer.prompt([{
+		        name: "productID",
+		        type: "input",
+		        message: "Enter the ID of the product you would like to restock: ",
+		        validate: function(value) {
+		            if (isNaN(value)==false && value>0 && value<=numProducts)
+		                return true;
+		            else
+		                return false;
+		        }
+		    }, {
+		        name: "numUnits",
+		        type: "input",
+		        message: "How many units would you like to add? ",
+		        validate: function(value) {
+		            if (isNaN(value) == false) {
+		                return true;
+		            } else {
+		                return false;
+		            }
+		        }
+		    }]).then(function(answer) {
+		        connection.query('SELECT * FROM Products WHERE ItemID = '+answer.productID, function(err, res) {
+		        	var newQuantity = parseInt(res[0].StockQuantity) + parseInt(answer.numUnits);
+		        	connection.query("UPDATE Products SET ? WHERE ?", [{
+			            StockQuantity: newQuantity
+			        },
+			        {
+			        	ItemID: answer.productID
+			        }], function(err, resp) {
+			            console.log("Add to Inventory successful. You now have " + newQuantity + " units");
+			        });
+		        });
+		    });
+        }
+        else if(answer.option == "Add New Product"){
+
+        }
+    });
+};
+
+var displayItems = function() {
+    connection.query('SELECT * FROM Products', function(err, res) {
+        for (var i = 0; i < res.length; i++) {
+            console.log("");
+            console.log("ID: " + res[i].ItemID);
+            console.log("Name: " + res[i].ProductName);
+            console.log("Price: $" + res[i].Price);
+            console.log("Quantity: " + res[i].StockQuantity);
+        }
+        console.log("");
+    });
+};

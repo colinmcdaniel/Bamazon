@@ -5,15 +5,15 @@ var numProducts;
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
-    user: "root", //Your username
-    password: "drummrboy1", //Your password
+    user: "root",
+    password: "drummrboy1",
     database: "Bamazon"
 });
 
 connection.connect(function(err) {
     if (err) throw err;
     displayItems();
-})
+});
 
 var displayItems = function() {
     connection.query('SELECT * FROM Products', function(err, res) {
