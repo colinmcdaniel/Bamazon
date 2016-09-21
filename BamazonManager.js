@@ -78,36 +78,37 @@ var promptUser = function(){
 		    });
         }
         else if(answer.option == "Add New Product"){
-		    inquirer.prompt([{
-		        name: "product",
-		        type: "input",
-		        message: "What is the name of the product?"
-		    }, {
-		        name: "department",
-		        type: "input",
-		        message: "What department is the product in?"
-		    }, {
-		        name: "price",
-		        type: "input",
-		        message: "What price will you sell this product for?",
-		        validate: function(value) {
-		            if (isNaN(value) == false) {
-		                return true;
-		            } else {
-		                return false;
-		            }
-		        }
-		    }, {
-		    	name: "quantity",
-		    	type: "input",
-		    	message: "What is the stock quantity of this product?",
-		    	validate: function(value) {
-		            if (isNaN(value) == false) {
-		                return true;
-		            } else {
-		                return false;
-		            }
-		        }
+		    inquirer.prompt([
+			    {
+			        name: "product",
+			        type: "input",
+			        message: "What is the name of the product?"
+			    }, {
+			        name: "department",
+			        type: "input",
+			        message: "What department is the product in?"
+			    }, {
+			        name: "price",
+			        type: "input",
+			        message: "What price will you sell this product for?",
+			        validate: function(value) {
+			            if (isNaN(value) == false) {
+			                return true;
+			            } else {
+			                return false;
+			            }
+			        }
+			    }, {
+			    	name: "quantity",
+			    	type: "input",
+			    	message: "What is the stock quantity of this product?",
+			    	validate: function(value) {
+			            if (isNaN(value) == false) {
+			                return true;
+			            } else {
+			                return false;
+			            }
+			        }
 		    }]).then(function(answer) {
 		        connection.query("INSERT INTO Products SET ?", {
 		            ProductName: answer.product,
