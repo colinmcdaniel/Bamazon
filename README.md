@@ -38,4 +38,8 @@ This Node.js application allows users to act as a Bamazon customer or manager. C
 * Node.js
 * Inquirer npm package
 
+Customer:
 ![customer](https://cloud.githubusercontent.com/assets/18273101/22231160/7e1a0d04-e196-11e6-9990-8935a4718fa5.gif)
+
+Manager:
+![manager](https://cloud.githubusercontent.com/assets/18273101/22231172/a0957b16-e196-11e6-9b96-5a26d7edc35a.gif)
