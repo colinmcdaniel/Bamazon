@@ -36,4 +36,5 @@ This Node.js application allows users to act as a Bamazon customer or manager. C
 
 * MySQL
 * Node.js
+* Inquirer npm package
 
